@@ -6,13 +6,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class PhoneBook {
+public class PhoneBook implements IPhonebookFunctions{
 
 	private ArrayList<Record> records = new ArrayList<Record>();
 
 	public PhoneBook() {
 		readFromFile();
-
 	}
 
 	public void addRecord(String name, String phNumber) {
@@ -73,7 +72,7 @@ public class PhoneBook {
 		}
 	}
 
-	public void readFromFile() {
+	private void readFromFile() {
 		String currentLine = "";
 		String split[];
 		try (BufferedReader reader = new BufferedReader(
@@ -91,4 +90,5 @@ public class PhoneBook {
 			e.printStackTrace();
 		}
 	}
+	
 }

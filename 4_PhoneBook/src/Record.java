@@ -3,24 +3,20 @@ public class Record {
 
 	private String name;
 	private String phoneNumber;
-	private int outgoingCalls;
 
 	public Record() {
 		this.name = "";
 		this.phoneNumber = "";
-		this.outgoingCalls = 0;
 	}
 
 	public Record(String name) {
 		this.name = name;
 		this.phoneNumber = "";
-		this.outgoingCalls = 0;
 	}
 	
 	public Record(String name, String phoneNumber) {
 		this.name = name;
 		this.phoneNumber = phoneNumber;
-		this.outgoingCalls = 0;
 	}
 
 	public String getName() {
@@ -37,14 +33,6 @@ public class Record {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
-	}
-
-	public int getOutgoingCalls() {
-		return outgoingCalls;
-	}
-
-	public void setOutgoingCalls(int outgoingCalls) {
-		this.outgoingCalls = outgoingCalls;
 	}
 	
 	@Override
