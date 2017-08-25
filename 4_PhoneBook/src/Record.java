@@ -10,13 +10,13 @@ public class Record {
 	}
 
 	public Record(String name) {
-		this.name = name;
+		setName(name);
 		this.phoneNumber = "";
 	}
-	
+
 	public Record(String name, String phoneNumber) {
-		this.name = name;
-		this.phoneNumber = phoneNumber;
+		setName(name);
+		setPhoneNumber(phoneNumber);
 	}
 
 	public String getName() {
@@ -24,7 +24,11 @@ public class Record {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		if (name != null) {
+			this.name = name;
+		} else {
+			this.name = "";
+		}
 	}
 
 	public String getPhoneNumber() {
@@ -32,9 +36,13 @@ public class Record {
 	}
 
 	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+		if (phoneNumber != null) {
+			this.phoneNumber = phoneNumber;
+		} else {
+			this.phoneNumber = "";
+		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Name: " + this.name + "\nPhone number: " + this.phoneNumber;

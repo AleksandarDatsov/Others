@@ -6,35 +6,38 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class PhoneBook implements IPhonebookFunctions{
+public class PhoneBook implements IMap {
 
 	private ArrayList<Record> records = new ArrayList<Record>();
+	private final String filePath = "Records";
 
 	public PhoneBook() {
-		readFromFile();
+		readFromFile(this.filePath);
 	}
 
-	public void addRecord(String name, String phNumber) {
+	public String addRecord(String name, String phNumber) {
 		Record rec;
-		phNumber = isNumberGood(phNumber);
+		phNumber = normalized(phNumber);
 		if (!phNumber.equals("")) {
 			rec = new Record(name, phNumber);
 			records.add(rec);
 			sortArray();
-			System.out.println("The contact was added");
-		}else{
-			System.out.println("Wrong phNumber");
+			return "Record ["+ rec.getName()+" " + rec.getPhoneNumber() +"] Was Added";
 		}
+		return "Wrong Number";
 	}
 
-	public void deleteRecord(String name){
-		for(int index = 0; index < records.size(); index++){
-			if(records.get(index).getName().equals(name)){
+	public String deleteRecord(String name) {
+		for (int index = 0; index < records.size(); index++) {
+			if (records.get(index).getName().equals(name)) {
 				records.remove(index);
+				return "Record [" + name + "] Was Deleted";
 			}
 		}
+		return "No such Record";
 	}
-	private String isNumberGood(String phoneNumber) {
+
+	private String normalized(String phoneNumber) {
 		if (phoneNumber.matches("^(\\+359|00359|0)[8]{1}[7-9]{1}[2-9]{1}(\\d{6})$")) {
 			switch (phoneNumber.substring(0, 2)) {
 			case "08":
@@ -50,13 +53,15 @@ public class PhoneBook implements IPhonebookFunctions{
 		return "";
 	}
 
-	public void viewPhoneNumber(String name){
-		for(Record r : records){
-			if(r.getName().equals(name)){
-				System.out.println(r);
+	public String viewPhoneNumber(String name) {
+		for (Record r : records) {
+			if (r.getName().equals(name)) {
+				return r.getPhoneNumber();
 			}
 		}
+		return "No such Number";
 	}
+
 	private void sortArray() {
 		Collections.sort(records, new Comparator<Record>() {
 			@Override
@@ -66,20 +71,21 @@ public class PhoneBook implements IPhonebookFunctions{
 		});
 	}
 
-	public void printArr() {
+	public String printArr() {
+		StringBuilder sb = new StringBuilder("");
 		for (Record r : records) {
-			System.out.println(r);
+			sb.append(r.toString() + "\n");
 		}
+		return sb.toString();
 	}
 
-	private void readFromFile() {
+	private void readFromFile(String filePath) {
 		String currentLine = "";
 		String split[];
-		try (BufferedReader reader = new BufferedReader(
-				new FileReader("C:\\Users\\frog\\Desktop\\IOtask\\Records.txt"))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 			while ((currentLine = reader.readLine()) != null) {
 				split = currentLine.split(" ");
-				split[1] = isNumberGood(split[1]);
+				split[1] = normalized(split[1]);
 				if (!split[1].equals("")) {
 					addRecord(split[0], split[1]);
 				}
@@ -90,5 +96,4 @@ public class PhoneBook implements IPhonebookFunctions{
 			e.printStackTrace();
 		}
 	}
-	
 }
