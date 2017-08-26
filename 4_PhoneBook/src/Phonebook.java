@@ -6,22 +6,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class PhoneBook implements IMap {
+public class Phonebook implements IMap {
 
 	private ArrayList<Record> records = new ArrayList<Record>();
 	private final String filePath = "Records";
 
-	public PhoneBook() {
+	public Phonebook() {
 		readFromFile(this.filePath);
 	}
 
-	public String addRecord(String name, String phNumber) {
+	public String addRecord(String name, String phNumber, int outgoingCalls) {
 		Record rec;
 		phNumber = normalized(phNumber);
 		if (!phNumber.equals("")) {
-			rec = new Record(name, phNumber);
+			rec = new Record(name, phNumber, outgoingCalls);
 			records.add(rec);
-			sortArray();
 			return "Record ["+ rec.getName()+" " + rec.getPhoneNumber() +"] Was Added";
 		}
 		return "Wrong Number";
@@ -62,7 +61,7 @@ public class PhoneBook implements IMap {
 		return "No such Number";
 	}
 
-	private void sortArray() {
+	private void sortArrayByName() {
 		Collections.sort(records, new Comparator<Record>() {
 			@Override
 			public int compare(Record o1, Record o2) {
@@ -71,8 +70,18 @@ public class PhoneBook implements IMap {
 		});
 	}
 
+	private void sortArrayByOutgoingCalls() {
+		Collections.sort(records, new Comparator<Record>() {
+			@Override
+			public int compare(Record o1, Record o2) {
+				return o2.getOutgoingCalls() - o1.getOutgoingCalls();
+			}
+		});
+	}
+	
 	public String printArr() {
 		StringBuilder sb = new StringBuilder("");
+		sortArrayByName();
 		for (Record r : records) {
 			sb.append(r.toString() + "\n");
 		}
@@ -87,7 +96,7 @@ public class PhoneBook implements IMap {
 				split = currentLine.split(" ");
 				split[1] = normalized(split[1]);
 				if (!split[1].equals("")) {
-					addRecord(split[0], split[1]);
+					addRecord(split[0], split[1], Integer.parseInt(split[2]));
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -95,5 +104,15 @@ public class PhoneBook implements IMap {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String printTopFiveWithMostOutgoingCalls() {
+		StringBuilder sb = new StringBuilder("");
+		sortArrayByOutgoingCalls();
+		for(int i = 0; i < 5 || i < records.size(); i++){
+			sb.append(records.get(i) + "\n");
+		}
+		return sb.toString();
 	}
 }
